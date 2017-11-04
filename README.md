@@ -9,7 +9,7 @@ vue组件：中国省市区级联组件 vue2.0
 
 ## demo
 
-示例（vue@2.0+） [点我](http://kuishang.github.io/kkCascader/index.html).
+示例（vue@2.0+） [点我](https://kuishang.github.io/kkCascader/).
 
 
 ## 截图
