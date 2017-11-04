@@ -29,7 +29,7 @@ vue组件：中国省市区级联组件 vue2.0
 #### npm
 
 ```shell
-$ npm install  kkCascader
+$ npm install  kk-cascader
 ```
 
 ## 使用
