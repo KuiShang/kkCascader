@@ -49,7 +49,7 @@ const collection = {
 };
 
 export default {
-	name : 'kkCascader',
+	name : 'kk-cascader',
 	directives: {
 		'clickoutside' : VueClickoutside
 	},
