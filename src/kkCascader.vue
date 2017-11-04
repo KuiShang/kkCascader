@@ -1,7 +1,7 @@
 <template>
-<div class="vue-dist-picker" @mouseout="endChoice" @mouseover="startMouseOver">
-	<input type="text" autocomplete="off" disableautocomplete :name="field" :id="field" :placeholder="placeholder" :value="showName"
-		@focus="startChoice" @keypress="startChoice" @blur="endChoice" v-el:input>
+<div class="vue-dist-picker"  v-clickoutside="immEndChoice">
+	<input type="text" autocomplete="off" disableautocomplete :placeholder="placeholder" :value="showName"
+		@focus="startChoice" @keypress="startChoice"  ref="input">
 	<!--选择面板-->
 	<div class="vdp-panel" v-show="distPanelIsShow">
 		<h5>选择省市区</h5>
@@ -12,13 +12,13 @@
 		</ul>
 		<div class="vdp-list">
 			<ul v-if="activatedTag==1">
-				<li v-for="item in provList" @click="choiceProv(item.id)" title="{{ item.name }}">{{ item.name }}</li>
+				<li v-for="(item, idx ) in provList" @click="choiceProv(item.id)" :key="idx" :title=" item.name ">{{ item.name }}</li>
 			</ul>
 			<ul v-if="activatedTag==2">
-				<li v-for="item in cityList" @click="choiceCity(item.id)" title="{{ item.name }}">{{ item.name }}</li>
+				<li v-for="(item, idx ) in cityList" @click="choiceCity(item.id)" :key="idx" :title=" item.name ">{{ item.name }}</li>
 			</ul>
 			<ul v-if="activatedTag==3">
-				<li v-for="item in distList" @click="choiceDist(item.id)" title="{{ item.name }}">{{ item.name }}</li>
+				<li v-for="(item, idx ) in distList" @click="choiceDist(item.id)" :key="idx" :title="item.name ">{{ item.name }}</li>
 			</ul>
 		</div>
 	</div>
@@ -27,8 +27,10 @@
 </template>
 
 <script>
-'use strict';
 
+import Vue from 'vue'
+import VueClickoutside from './clickoutside.js'
+import DIST_PICKER_LIST from 'china-dist-data'
 const collection = {
     /*
 	 * 通过id获取集合条目，取得条目
@@ -42,68 +44,33 @@ const collection = {
 				}
 			});
 		}
-
 		return res;
 	}
 };
 
 export default {
+	name : 'kkCascader',
+	directives: {
+		'clickoutside' : VueClickoutside
+	},
+	create() {
+		this.setShowName();
+	},
 	props: {
-		field: {
-			type: String,
-			default: ''
-		},
-		//distId
-		value: {
-			default: '',
-			twoWay: true
-		},
-		showName: {
-			default: '',
-			twoWay: true
-		},
 		placeholder: {
 			type: String,
-			default: ''
+			default: '请选择城市'
 		}
 	},
 	data() {
-		let that = this,
-			{
-				value
-			} = this,
-			activatedTag = 1,
-			provId = '',
-			cityId = '',
-			distId = '';
-		if (value) {
-			DIST_PICKER_LIST['-1'].forEach((item) => {
-				DIST_PICKER_LIST[item.id].forEach((cityItem) => {
-					if (DIST_PICKER_LIST[cityItem.id]) {
-						DIST_PICKER_LIST[cityItem.id].forEach((distItem) => {
-							if (distItem.id == value) {
-								provId = item.id;
-								cityId = cityItem.id;
-								distId = distItem.id;
-								activatedTag = 3;
-								// 必须等到下一轮去运行时间，可恶的组件没有created函数
-								setTimeout(function () {
-									that.setShowName();
-								}, 0);
-							}
-						});
-					}
-				});
-			});
-		}
 		return {
 			distPanelIsShow: false,
-			isMouseOver: false,
-			activatedTag, //1省 2市 3区
+			activatedTag : 1, //1省 2市 3区
 			provList: DIST_PICKER_LIST['-1'],
-			provId,
-			cityId,
-			distId
+			provId:'',
+			cityId:'',
+			distId:'',
+			showName:''
 		};
 	},
 	computed: {
@@ -171,17 +138,12 @@ export default {
 		}
 	},
 	methods: {
-		setShowName() {
-			let {
-				currProv,
-				currCity,
-				currDist
-			} = this;
-			if (currProv.id && currCity.id && currDist.id) {
-				this.showName = currProv.name + '-' + currCity.name + '-' + currDist.name;
-			} else {
-				this.showName = '';
+		// 开始选择（显示省市区面板）
+		startChoice(e) {
+			if (e && e.type == 'keypress') {
+				e.returnValue = false;
 			}
+			this.distPanelIsShow = true;
 		},
 		activeTag(k) {
 			this.activatedTag = k;
@@ -199,41 +161,26 @@ export default {
 		},
 		choiceDist(id) {
 			this.distId = id;
-			this.value = id;
 			this.setShowName();
 			this.immEndChoice();
+			this.$emit('change', id, this.showName);
 		},
-		// 开始选择（显示省市区面板）
-		startChoice(e) {
-			if (e && e.type == 'keypress') {
-				e.returnValue = false;
+		setShowName() {
+			let {
+				currProv,
+				currCity,
+				currDist
+			} = this;
+			if (currProv.id && currCity.id && currDist.id) {
+				this.showName = currProv.name + '-' + currCity.name + '-' + currDist.name;
+			} else {
+				this.showName = '';
 			}
-			this.distPanelIsShow = true;
-		},
-		// 鼠标离开省市区选择区域时超过一定时间，关闭省市区面板
-		endChoice(e) {
-			let that = this,
-				inputEle = that.$els.input;
-			if(e.type == 'mouseout') {
-				that.isMouseOver = false;
-			}
-			setTimeout(function() {
-				if (!that.isMouseOver && inputEle != document.activeElement) {
-					that.distPanelIsShow = false;
-				}
-			}, 300);
-		},
-		startMouseOver() {
-			this.isMouseOver = true;
 		},
 		// 立即关闭省市区面板
 		immEndChoice() {
-			this.isMouseOver = true;
 			this.distPanelIsShow = false;
 		}
-	},
-	create() {
-		this.setShowName();
 	}
 }
 
@@ -243,8 +190,10 @@ export default {
 
 $grey1: #DDD;
 $grey2: #f2f2f3;
-$c1: #d01;
-$c2: #dd606a;
+// $c1: #d01;
+// $c2: #dd606a;
+$c1: #89aef9;
+$c2: #8babec;
 
 @keyframes vueDistPicker {
 	0% {
