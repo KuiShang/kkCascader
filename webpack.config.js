@@ -2,8 +2,8 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  // entry: './src/main.js',
-  entry: './src/index.js',  //   -打包到npm时候 用这个入口
+   entry: './src/main.js',
+  // entry: './src/index.js',  //   -打包到npm时候 用这个入口
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
