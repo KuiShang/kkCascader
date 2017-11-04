@@ -1,4 +1,4 @@
-import cascader from './kkCascader'
+import cascader from './kkCascader.vue'
 const install = function(Vue, opts = {}) {
       Vue.component(cascader.name, cascader);
 };
