@@ -1,24 +1,31 @@
 {
-  "name": "kk-cascader",
+  "name": "kkcascader",
   "description": " vue组件：中国省市区级联组件 vue2.0",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "author": "kk <541459156@qq.com>",
-  "main": "/src/index.js",
+  "main": "dist/kkcascader.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "dist2": "vue build ./src/index.js",
+    "dist": "vue build ./src/index.js --config ./build.config.js --dist ./dist2/ --prod --lib"
   },
   "dependencies": {
     "china-dist-data": "^1.0.0",
-    "vue": "^2.4.4"
+    "vue-pay-keyboard": "^1.1.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/KuiShang/kkCascader.git"
   },
-  "keywords": ["vue", "省市区", "级联组件"],
+  "keywords": [
+    "vue",
+    "省市区",
+    "级联组件"
+  ],
   "license": "ISC",
   "devDependencies": {
+    "vue": "^2.4.4",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",

@@ -5,7 +5,7 @@ vue组件：中国省市区级联组件 vue2.0
 
 ## 更新日志
 
-### @1.0.3
+### @1.0.0
 
 ## demo
 
@@ -29,7 +29,7 @@ vue组件：中国省市区级联组件 vue2.0
 #### npm
 
 ```shell
-$ npm install  kkcascader
+$ npm install  kk-cascader
 ```
 
 ## 使用
@@ -53,13 +53,23 @@ $ npm install  kkcascader
 <template>
   <div id="app">
    		<label for="dist">收货地址</label>
-		  <kkcascader  placeholder="请选择地址" @change="change"></kkcascader>
+		  <dist-picker  placeholder="请选择地址" @change="change"></dist-picker>
   </div>
 </template>
 
 <script>
- import cascader from './lib/index.js'
- Vue.use(cascader)
+import distPicker from 'kkCascader'
+export default {
+  name: 'app',
+  components: {
+    'dist-picker': distPicker
+  },
+  methods: {
+    change(id , value) {
+      console.log(id, value)
+    }
+  }
+}
 </script>
 
 

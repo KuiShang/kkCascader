@@ -1,17 +1,20 @@
 <template>
   <div id="app">
+    
    		<label for="dist">收货地址</label>
-		  <dist-picker  placeholder="请选择地址" @change="change"></dist-picker>
+       <kkcascader></kkcascader>
+       123
+	
   </div>
 </template>
 
 <script>
-import distPicker from './kkCascader.vue'
+// import distPicker from './kkCascader.vue'
 export default {
   name: 'app',
-  components: {
-    'dist-picker': distPicker
-  },
+  // components: {
+  //   'dist-picker': distPicker
+  // },
   methods: {
     change(id , value) {
       console.log('父亲组件得到的值')
