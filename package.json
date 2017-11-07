@@ -1,7 +1,7 @@
 {
   "name": "kkcascader",
   "description": " vue组件：中国省市区级联组件 vue2.0",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "kk <541459156@qq.com>",
   "main": "dist/kkcascader.js",
   "scripts": {

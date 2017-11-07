@@ -2,7 +2,7 @@
   <div id="app">
     
    		<label for="dist">收货地址</label>
-       <kkcascader></kkcascader>
+       <kkcascader @change='change'></kkcascader>
        123
 	
   </div>
@@ -16,9 +16,9 @@ export default {
   //   'dist-picker': distPicker
   // },
   methods: {
-    change(id , value) {
+    change(dist) {
       console.log('父亲组件得到的值')
-      console.log(id, value)
+      console.log(dist)
     }
   }
 }

@@ -163,7 +163,8 @@ export default {
 			this.distId = id;
 			this.setShowName();
 			this.immEndChoice();
-			this.$emit('change', id, this.showName);
+			this.$emit('change', this.currDist);
+			
 		},
 		setShowName() {
 			let {
